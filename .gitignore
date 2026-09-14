@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Eleventy build output (regenerated from src/ — no need to track it)
+_site/
+output/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# npm
+npm-debug.log*
+package-lock.json.bak
