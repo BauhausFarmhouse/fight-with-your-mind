@@ -1,0 +1,191 @@
+---
+pagination:
+  data: categories
+  size: 1
+  alias: cat
+permalink: "/category/{{ cat.slug }}/"
+layout: layout.njk
+title: "{{ cat.title }} – Fight With Your Mind"
+---
+{#
+  CATEGORY PAGE TEMPLATE
+  =======================
+  This ONE file generates all 6 category pages (/category/<slug>/) by
+  looping over src/_data/categories.js — that's what the "pagination"
+  block above does. Each pass through the loop, "cat" holds one
+  category's data (title, intro text, curated links, etc.), and
+  "collections[cat.slug]" holds every post filed under that category.
+#}
+{% set otherCategories = categories | otherCategories(cat.slug) %}
+
+<div id="cat-header-grid">
+	<div class="grid1">
+		<img src="{{ cat.heroImage }}" alt="{{ cat.title }}" width="100%">
+	</div>
+	<div class="parentgrid">
+		{% for other in otherCategories %}
+			<div class="grid{{ loop.index + 1 }}">
+				<a href="/category/{{ other.slug }}/">
+					<img class="foursquarefight hover-big" src="{{ other.thumbImage }}" alt="{{ other.title }}" width="100%">
+				</a>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+{#
+  FEATURED POST
+  =============
+  If any post in this category has "featured: true" in its front matter,
+  it renders below, in its own full-width block — separate from the
+  intro/links area, not nested inside it. Matches the live site's real
+  structure: a plain <section> (the site's own CSS already makes
+  <section> a flex row) with the post's title+text in the first
+  .column, and — if the post has a "noteAside" field — its own note box
+  in a second .column.secondary-p right alongside it.
+#}
+{% set featuredPost = null %}
+{% for post in collections[cat.slug] %}
+  {% if post.data.featured and not featuredPost %}
+    {% set featuredPost = post %}
+  {% endif %}
+{% endfor %}
+
+<div class="cat-widget-container">
+	<div class="cat-text-widget" id="cat-text-widget-{{ cat.slug }}">
+		{% if cat.introHtml %}
+			{{ cat.introHtml | safe }}
+		{% else %}
+			<h1 style="font-size:5vmax">{{ cat.introHeading }}</h1>
+			{% for paragraph in cat.introText %}
+				<p>{{ paragraph | safe }}</p>
+			{% endfor %}
+			{% if cat.introQuote %}
+				<blockquote>{{ cat.introQuote }}</blockquote>
+			{% endif %}
+			{% for paragraph in cat.introTextAfterQuote %}
+				<p>{{ paragraph | safe }}</p>
+				{% if loop.index == 1 and cat.introSubheading %}
+					<h4>{{ cat.introSubheading }}</h4>
+				{% endif %}
+			{% endfor %}
+			{% if cat.closingSignedQuote %}
+				<p><i>{{ cat.closingSignedQuote.text }}<br><br>-{{ cat.closingSignedQuote.signature }}</i></p>
+			{% endif %}
+		{% endif %}
+	</div>
+	<div class="cat-links-widget" id="cat-links-widget-{{ cat.slug }}">
+		<h2 class="widgettitle">{{ cat.linksHeading }}</h2>
+		{% if cat.linksIntro %}<p>{{ cat.linksIntro }}</p>{% endif %}
+		{% if cat.linksQuote %}<p><em>{{ cat.linksQuote }}</em></p>{% endif %}
+		{% if cat.linksIntro or cat.linksQuote %}<hr>{% endif %}
+		{% for link in cat.links %}
+			<a target="_blank" rel="noopener" href="{{ link.url }}">
+				<div class="cat-link">
+					<div class="cat-link-thumb">
+						<img src="{{ link.image }}" alt="">
+					</div>
+					<div class="cat-link-text">
+						<h6>{{ link.title }}</h6>
+						<p>{{ link.text }}</p>
+					</div>
+				</div>
+			</a>
+			{% if not loop.last %}<hr>{% endif %}
+		{% endfor %}
+		<button type="button" class="cat-links-toggle" onclick="this.closest('.cat-links-widget').classList.toggle('expanded'); this.textContent = this.closest('.cat-links-widget').classList.contains('expanded') ? 'Show less' : 'Show more';">Show more</button>
+	</div>
+</div>
+
+{#
+  The live site visually caps the links box to the height of the text
+  column next to it (confirmed directly by comparing screenshots at the
+  same scroll position on both sites). The CSS text for this is
+  identical between our build and the live site (verified from the
+  actual theme stylesheet), but real browsers aren't producing the same
+  result from it here — rather than keep guessing why, this sets an
+  explicit max-height directly from the real rendered pixel height,
+  which sidesteps the ambiguity entirely.
+#}
+<script>
+(function () {
+	function syncLinksHeight() {
+		var text = document.getElementById('cat-text-widget-{{ cat.slug }}');
+		var links = document.getElementById('cat-links-widget-{{ cat.slug }}');
+		if (!text || !links) return;
+		if (window.matchMedia('(max-width: 850px)').matches) {
+			return;
+		}
+		links.style.maxHeight = text.getBoundingClientRect().height + 'px';
+	}
+	if (document.readyState === 'complete') {
+		syncLinksHeight();
+	} else {
+		window.addEventListener('load', syncLinksHeight);
+	}
+	window.addEventListener('resize', syncLinksHeight);
+})();
+</script>
+
+{% if featuredPost %}
+{% set isBoxesAside = (not featuredPost.data.noteAside) or featuredPost.data.noteAsideClass == "column" %}
+<div class="feature-cat-post" id="feature">
+	{% if not cat.hideFeaturedBanner %}
+		<section class="orange-row center-row" style="margin-top: 2rem; padding: 20px;">
+			<img src="/uploads/2020/07/featured-post.png" alt="Featured post">
+		</section>
+	{% endif %}
+	<div class="content">
+		<section class="feature-cat-post-body">
+			<div class="column" style="flex: {{ featuredPost.data.mainColumnFlex or (isBoxesAside and '2' or '1') }};">
+				<h1>{{ featuredPost.data.title }}</h1>
+				{% if featuredPost.data.featuredImage %}
+					<img src="{{ featuredPost.data.featuredImage }}" alt="{{ featuredPost.data.featuredImageAlt or '' }}">
+				{% endif %}
+				{{ featuredPost.templateContent | safe }}
+			</div>
+			<div class="column {{ isBoxesAside and 'post-sidebar' or (featuredPost.data.noteAsideClass or 'secondary-p') }}" style="flex: {{ featuredPost.data.noteAsideFlex or (isBoxesAside and '1' or '1') }};">
+				{% if featuredPost.data.noteAside %}
+					{{ featuredPost.data.noteAside | safe }}
+				{% else %}
+					{% include "sidebar-boxes.njk" %}
+				{% endif %}
+			</div>
+		</section>
+		{% if featuredPost.data.extraSection %}
+			{{ featuredPost.data.extraSection | safe }}
+		{% endif %}
+	</div>
+</div>
+{% endif %}
+
+{#
+  ALL OTHER POSTS IN THIS CATEGORY
+  =================================
+  Every post filed under this category (except the featured one, if any)
+  shows here as a card. This updates automatically — nothing to maintain
+  by hand when a new post gets added with this category set.
+#}
+<div class="cat-container">
+	<div class="cat-grid">
+		{% for post in collections[cat.slug] %}
+			{% if post != featuredPost %}
+				<article class="post">
+					<h6 class="post-header{% if post.data.upcoming %} upcoming{% endif %}">
+						{{ "UPCOMING" if post.data.upcoming else "post" }}
+					</h6>
+					{% if post.data.featuredImage %}
+						<div class="post-image">
+							<img src="{{ post.data.featuredImage }}" alt="{{ post.data.featuredImageAlt or '' }}">
+						</div>
+					{% endif %}
+					<h4 class="post-title">{{ post.data.title }}</h4>
+					<p class="post-excerpt">{{ post.data.excerpt }}</p>
+					{% if not post.data.upcoming %}
+						<a class="post-full-link" href="{{ post.url }}">View</a>
+					{% endif %}
+				</article>
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>

@@ -1,0 +1,112 @@
+---
+layout: layout.njk
+---
+{#
+  POST LAYOUT
+  ===========
+  Every file in src/posts/ that has "layout: post.njk" in its front matter
+  gets wrapped in this template automatically. This is the file that
+  turns your plain writing into a fully-styled page matching the site.
+
+  Front matter fields this template reads:
+    title           - required. The post headline.
+    date            - required. Used for sorting and the byline date.
+    category        - required. Which of the 6 categories this belongs to.
+                       Must exactly match one of: questioning-and-thought,
+                       deprogramming-and-education, the-expanse,
+                       communication-and-empathy, meaningful-action, social
+    author          - optional. Shows in the byline. Defaults to "FWYM".
+    featuredImage    - optional. Large image shown at the top of the post.
+    featuredImageAlt - the text description of that image, for screen
+                       readers. If featuredImage is set, fill this in.
+    excerpt          - optional. Short teaser text (not shown on the post
+                       itself, but available for category-listing cards).
+    relatedPosts      - optional. A list of other posts' URLs to link at
+                       the bottom, e.g. "/some-post-slug/". If left out
+                       entirely, this template automatically picks the 3
+                       most recent OTHER posts from the same category.
+#}
+{#
+  Every post gets a two-column layout on desktop: the article on the
+  left (2/3 width) and an aside on the right (1/3 width) — either a
+  post's own custom "noteAside" content, or, when a post doesn't define
+  one, the site's default donation/contributor boxes (sidebar-boxes.njk).
+  This matches the same isBoxesAside pattern used for the featured post
+  on category pages, including the responsive behavior: on mobile, the
+  default donation boxes move out of the inline column (hidden there)
+  and reappear once, lower down, inside the footer — right after
+  "Related posts" — so visitors reach the actual article without
+  scrolling past a donation pitch first. A post's own custom noteAside
+  content (like the "Is it Really Brainwashing?" note) is NOT part of
+  that swap — it stays inline in its own column always, on both mobile
+  and desktop, same as before.
+#}
+{% set isBoxesAside = (not noteAside) or noteAsideClass == "column" %}
+{#
+  "Tactic entry" styling: the short glossary-style write-ups in the
+  deprogramming-and-education category (Fear, Lying, Micro Targeting,
+  etc.) get a distinct in-page treatment — the image floats so text
+  wraps beside it instead of stacking below with dead space, extra
+  breathing room under the title, and a drop cap on the opening
+  paragraph. This is scoped ONLY to that category via the
+  "tactic-entry" class below; every other post/category keeps the
+  normal stacked-image layout untouched.
+#}
+{% set isTacticEntry = category == "deprogramming-and-education" %}
+<div class="content">
+	<section>
+		<div class="column {{ isTacticEntry and 'tactic-entry' or '' }}" style="margin-top:0; flex: {{ mainColumnFlex or (isBoxesAside and '2' or '1') }};">
+			<h1 style="font-size: 6vmax;">{{ title }}</h1>
+
+			{% if featuredImage %}
+				<img src="{{ featuredImage }}" alt="{{ featuredImageAlt or '' }}">
+			{% endif %}
+
+			{{ content | safe }}
+		</div>
+
+		<div class="column {{ isBoxesAside and 'post-sidebar' or (noteAsideClass or 'secondary-p') }}" style="flex: {{ noteAsideFlex or '1' }};">
+			{% if noteAside %}
+				{{ noteAside | safe }}
+			{% else %}
+				{% include "sidebar-boxes.njk" %}
+			{% endif %}
+		</div>
+	</section>
+
+
+	{% if extraSection %}
+		{{ extraSection | safe }}
+	{% endif %}
+</div>
+
+{#
+  RELATED POSTS
+  =============
+  If the post's front matter includes a manual "relatedPosts" list (a list
+  of URLs, e.g. "/some-post-slug/"), those exact posts are shown, in the
+  order listed. Otherwise, this automatically shows the 3 most recent
+  OTHER posts sharing this post's category. Either way, it renders using
+  the site's real related-posts styling (.yarpp-related class).
+#}
+{% if relatedPosts %}
+  {% set related = collections.allPosts | relatedByUrls(relatedPosts) %}
+{% else %}
+  {% set related = collections[category] | relatedByCategory(page.url) %}
+{% endif %}
+
+{% if related.length > 0 %}
+<div class="yarpp-related">
+	<h3>Related posts:</h3>
+	<div class="yarpp-thumbnails-horizontal">
+		{% for item in related %}
+			<a class="yarpp-thumbnail" href="{{ item.url }}">
+				{% if item.data.featuredImage %}
+					<img src="{{ item.data.featuredImage }}" alt="">
+				{% endif %}
+				<span class="yarpp-thumbnail-title">{{ item.data.title }}</span>
+			</a>
+		{% endfor %}
+	</div>
+</div>
+{% endif %}

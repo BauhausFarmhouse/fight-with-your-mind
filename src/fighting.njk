@@ -1,0 +1,148 @@
+---
+layout: layout.njk
+title: Fighting With Your Mind - Fight With Your Mind
+---
+<div class="column" id="fight-header">
+	<img src="/uploads/2020/08/speaking-truth.jpg">
+</div>
+
+<section>
+	<div class="column fight-col">
+		<h6 style="font-size: calc(12px + 2vmax);">Fight With Your Mind is an activism and advocacy organization with a mission to fight information warfare by teaching how it is used and why it is effective.</h6>
+		<p>Our goal is to bring truth and a shared reality back into focus by challenging the public to question and analyze information, and better understand our differences through expertise, education, and empathy.</p>
+	</div>
+	<div class="column fight-col">
+		<blockquote class="quote fight-quote">To prioritize the truth – the self, the opinion, and the fear of the unknown must take a humble back seat.</blockquote>
+		<p>In this safe environment we challenge you to explore your own perceptions, question your opinions, and see the world through a lens different from your own.</p>
+	</div>
+</section>
+
+<section class="gray-row center-row" style="padding: 1vw;">
+	<img style="width: 750px;" src="/uploads/2020/07/fight-6-words.png">
+</section>
+
+<section id="fight-grid">
+	<div id="questioning">
+		<a href="/category/questioning-and-thought"><img src="/uploads/2019/12/questioning-and-knowledge.png" class="hover-big"></a>
+	</div>
+	<div id="deprogramming">
+		<a href="/category/deprogramming-and-education"><img src="/uploads/2019/12/deprogramming-and-education.jpg" class="hover-big"></a>
+	</div>
+	<div id="expanse">
+		<a href="/category/the-expanse"><img src="/uploads/2019/12/the-expanse.png" class="hover-big"></a>
+	</div>
+	<div id="communication">
+		<a href="/category/communication-and-empathy"><img src="/uploads/2019/12/communication-and-empathy.jpg" class="hover-big"></a>
+	</div>
+	<div id="action">
+		<a href="/category/meaningful-action"><img src="/uploads/2019/12/meaningful-action.png" class="hover-big"></a>
+	</div>
+	<div id="social">
+		<a href="/social/"><img src="/uploads/2020/08/social-media.jpg" class="hover-big"></a>
+	</div>
+	<div id="fighting-text">
+		<div id="fighting-1">
+			<img src="/uploads/2020/08/intended-to-explore.jpg">
+			<p>We are a country and a world divided more than ever before. Our collective situation has been compared to many embattled periods of conflict in history but…</p>
+			<blockquote>Never before in this country have we experienced a total loss of agreement on how to perceive reality or information itself.</blockquote>
+		</div>
+		<div id="fighting-2">
+			<p>This is not surprising because all new war tactics are unfamiliar to the first generation of victims they are used on. As a whole, we are untrained on the rules of information warfare, which is a war fought in the background, by obfuscated entities, on a public that is unaware of its participation.</p>
+			<p>This is the world we live in today, and the only way to fight information warfare is to know better, to understand the rules of war by studying the tactics, to ask questions, and to always remember that the truth will stand up to scrutiny. The abilities to think, to be mindful, to be analytical, and to be observant are now valuable defenses in this war.</p>
+			<img src="/uploads/2020/08/we-will-be-controlled.jpg">
+		</div>
+	</div>
+</section>
+
+<script>
+(function () {
+	// #fighting-text spans all 3 rows of the tile grid on the desktop
+	// (>1024px) layout only. Its content is naturally a bit taller than
+	// the six square tiles combined, which used to force extra blank
+	// space into the grid one way or another. Instead, we nudge
+	// #fighting-text's own font size up or down by a small amount so its
+	// rendered height matches the tile grid's height exactly — no grid
+	// track sizing tricks, no layout restructuring, nothing that touches
+	// the 1024px/850px/680px breakpoints below, since this is skipped
+	// entirely outside the desktop 3-row layout.
+	function fitFightingText() {
+		var text = document.getElementById("fighting-text");
+		var questioning = document.getElementById("questioning");
+		var social = document.getElementById("social");
+		if (!text || !questioning || !social) return;
+
+		if (window.innerWidth <= 1024) {
+			text.style.removeProperty("--text-fit-scale");
+			text.style.removeProperty("--text-fit-line-scale");
+			return;
+		}
+
+		var scale = 1;
+		text.style.setProperty("--text-fit-scale", scale);
+		text.style.setProperty("--text-fit-line-scale", 1);
+
+		// Pass 1: get close by nudging font-size. Re-measure the available
+		// height on every iteration, not just once — shrinking/growing
+		// #fighting-text also tightens/loosens the tile grid's own row
+		// gaps (that's the whole reason this script exists), so the
+		// target itself moves as we adjust. Text height also responds
+		// close to linearly to small font-size changes, but not exactly —
+		// line-wrapping happens in whole-line jumps, so this alone
+		// plateaus with a small residual gap rather than landing exactly.
+		for (var i = 0; i < 12; i++) {
+			var availableHeight = social.getBoundingClientRect().bottom - questioning.getBoundingClientRect().top;
+			var currentHeight = text.scrollHeight;
+			if (!currentHeight) break;
+			var ratio = availableHeight / currentHeight;
+			if (Math.abs(ratio - 1) < 0.001) break;
+			scale = scale * ratio;
+			// "Just a little" — clamp so text never gets cramped or
+			// oversized even if content is edited to be much
+			// shorter/longer later.
+			scale = Math.max(0.75, Math.min(1.25, scale));
+			text.style.setProperty("--text-fit-scale", scale);
+		}
+
+		// Pass 2: close the exact remaining pixels with a small line-height
+		// nudge instead of font-size. Unlike font-size, line-height doesn't
+		// re-trigger word-wrapping, so distributing the leftover gap across
+		// each line of text lands on an exact match rather than plateauing.
+		// Line count is estimated from the text elements only (not the two
+		// images also inside #fighting-text), or the estimate is wildly
+		// too high and the correction ends up far too small to matter.
+		// Looped for the same reason as pass 1: adjusting line-height also
+		// changes the tile grid's own row gaps, moving the target slightly,
+		// so one more small correction is needed after the first big one.
+		for (var k = 0; k < 3; k++) {
+			var availableHeight2 = social.getBoundingClientRect().bottom - questioning.getBoundingClientRect().top;
+			var currentTextHeight = text.scrollHeight;
+			var remaining = availableHeight2 - currentTextHeight;
+			if (Math.abs(remaining) < 0.5) break;
+
+			var textEls = text.querySelectorAll("p, blockquote");
+			var totalTextHeight = 0;
+			for (var j = 0; j < textEls.length; j++) {
+				totalTextHeight += textEls[j].getBoundingClientRect().height;
+			}
+			var lineHeightPx = parseFloat(getComputedStyle(text.querySelector("p")).lineHeight) || 0;
+			if (!lineHeightPx || !totalTextHeight) break;
+
+			var approxLineCount = totalTextHeight / lineHeightPx;
+			if (approxLineCount <= 0) break;
+
+			var currentLineScale = parseFloat(getComputedStyle(text).getPropertyValue("--text-fit-line-scale")) || 1;
+			var perLineAdjustment = remaining / approxLineCount;
+			var lineScale = currentLineScale + perLineAdjustment / lineHeightPx;
+			lineScale = Math.max(0.8, Math.min(1.2, lineScale));
+			text.style.setProperty("--text-fit-line-scale", lineScale);
+		}
+	}
+
+	window.addEventListener("load", fitFightingText);
+	var resizeTimer;
+	window.addEventListener("resize", function () {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(fitFightingText, 150);
+	});
+})();
+</script>
