@@ -132,7 +132,7 @@ title: "{{ cat.title }} – Fight With Your Mind"
 <div class="feature-cat-post" id="feature">
 	{% if not cat.hideFeaturedBanner %}
 		<section class="orange-row center-row" style="margin-top: 2rem; padding: 20px;">
-			<img src="/uploads/2020/07/featured-post.png" alt="Featured post">
+			<img src="{{ '/uploads/2020/07/featured-post.png' | url }}" alt="Featured post">
 		</section>
 	{% endif %}
 	<div class="content">
