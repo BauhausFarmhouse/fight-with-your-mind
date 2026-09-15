@@ -117,7 +117,15 @@ module.exports = function (eleventyConfig) {
   });
 
   return {
-    pathPrefix: "/fight-with-your-mind/",
+    // On the GitHub Pages preview (no custom domain yet), the site lives at
+    // bauhausfarmhouse.github.io/fight-with-your-mind/ — a subpath — so every
+    // internal link and asset path needs that subpath prepended.
+    // Once the custom domain is pointed at GitHub Pages, the site instead
+    // lives at the domain root, so no prefix should be added at all.
+    // ELEVENTY_ENV=production is set in the GitHub Actions workflow for the
+    // custom-domain deploy; everything else (local dev, and the plain preview
+    // build) falls back to the subpath prefix.
+    pathPrefix: process.env.ELEVENTY_ENV === "production" ? "/" : "/fight-with-your-mind/",
     dir: {
       input: "src",
       output: "_site",

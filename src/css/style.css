@@ -257,7 +257,7 @@ a:hover { filter: brightness(0.8); }
    HOMEPAGE HERO
    ========================================================================== */
 #home-hero {
-  background-image: url("/uploads/2020/06/Chalkboard-background-only-scaled.jpg");
+  background-image: url("../uploads/2020/06/Chalkboard-background-only-scaled.jpg");
   background-size: cover;
   text-align: right;
 }
@@ -387,7 +387,7 @@ h2.widgettitle { letter-spacing: normal; font-size: calc(12px + 1.75vmax); font-
 .two-thirds-column a { color: #e39600; }
 
 #crowd-row {
-  background-image: url("/uploads/2020/03/crowd.png");
+  background-image: url("../uploads/2020/03/crowd.png");
   background-position: left bottom; background-size: 50vw; background-repeat: no-repeat;
   display: block;
 }
@@ -460,7 +460,7 @@ h2.widgettitle { letter-spacing: normal; font-size: calc(12px + 1.75vmax); font-
 }
 #social-grid a, #social-grid img { margin: 0; padding: 0; }
 #social-row {
-  background-image: url("/uploads/2020/07/social-header-background.jpg");
+  background-image: url("../uploads/2020/07/social-header-background.jpg");
   background-position: center; background-size: cover; display: block;
 }
 .social-subhead { color: #e39600; font-style: italic; font-weight: bold; font-size: calc(12px + 1.2vmax); }
@@ -482,7 +482,7 @@ h2.widgettitle { letter-spacing: normal; font-size: calc(12px + 1.75vmax); font-
   width: 100%; height: calc(200px + 2vw); position: relative;
 }
 #libral-row {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 20%, transparent 80%, rgba(0, 0, 0, 0.4)), url("/uploads/2020/07/libral-background.jpg");
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 20%, transparent 80%, rgba(0, 0, 0, 0.4)), url("../uploads/2020/07/libral-background.jpg");
   background-position: center; background-size: cover; padding: 150px 0;
 }
 #libral-card { background-color: #ffffff; box-shadow: 0 10px 20px 10px rgba(0, 0, 0, 0.4); padding: 2vmax; width: 700px; max-width: 80vw; }

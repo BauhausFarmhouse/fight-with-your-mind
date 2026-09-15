@@ -25,7 +25,7 @@ title: "{{ cat.title }} – Fight With Your Mind"
 	<div class="parentgrid">
 		{% for other in otherCategories %}
 			<div class="grid{{ loop.index + 1 }}">
-				<a href="/category/{{ other.slug }}/">
+				<a href="{{ ('/category/' + other.slug + '/') | url }}">
 					<img class="foursquarefight hover-big" src="{{ other.thumbImage }}" alt="{{ other.title }}" width="100%">
 				</a>
 			</div>
