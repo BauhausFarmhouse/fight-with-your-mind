@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{{ title or "Fight With Your Mind – You Cant Not Think" }}</title>
-	<link rel="stylesheet" href="/css/style.css">
-	<link rel="icon" href="/uploads/2019/10/FWYM-Favicon-75x75.png" sizes="32x32">
+	<link rel="stylesheet" href="{{ '/css/style.css' | url }}">
+	<link rel="icon" href="{{ '/uploads/2019/10/FWYM-Favicon-75x75.png' | url }}" sizes="32x32">
 </head>
 <body{% if "post-sidebar" in content %} class="has-post-sidebar"{% endif %}>
 
