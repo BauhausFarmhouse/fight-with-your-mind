@@ -18,7 +18,7 @@ extraSection: |
     <h3 style="text-align: center">The strategy isn't to convince you that their ideas are right, it is to program you like a computer.</h3>
     <div class="inset-row">
       <div class="column" style="max-width:300px">
-        <img src="{{ '/uploads/2020/06/brainwash-light.png' | url }}" alt="Illustration of a brain being influenced by outside forces">
+        <img src="/uploads/2020/06/brainwash-light.png" alt="Illustration of a brain being influenced by outside forces">
       </div>
       <div class="column">
         <p>Brainwashing is a systematic programming of the human brain to react to information or cues in a specific desired manner. It is very subtle and highly invasive, and is done with the intent to alter everything from automatic responses to opinions, without the subject ever realizing anything has changed. Because it is nearly invisible, it can be difficult to see where one has been influenced.</p>

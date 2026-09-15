@@ -9,4 +9,4 @@ featuredImageAlt: "Illustration representing the manipulation tactic: Deflecting
 ---
 This tactic helps guilty parties avoid taking responsibility for wrongdoing by distracting audiences with wrongdoing elsewhere–"I did this, but they did that". Deflection and distraction mitigate consequences by adding confusion to the situation, and by normalizing bad behavior. If everyone is doing something wrong, then any singular person's wrongdoing won't feel as substantial as it would otherwise.
 
-**The full article is on its way.** We're still writing the in-depth breakdown of this tactic — check back soon, or [browse other posts](/fighting) in the meantime.
+**The full article is on its way.** We're still writing the in-depth breakdown of this tactic — check back soon, or [browse other posts]({{ '/fighting' | url }}) in the meantime.

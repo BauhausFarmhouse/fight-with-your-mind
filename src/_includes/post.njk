@@ -59,7 +59,7 @@ layout: layout.njk
 			<h1 style="font-size: 6vmax;">{{ title }}</h1>
 
 			{% if featuredImage %}
-				<img src="{{ featuredImage }}" alt="{{ featuredImageAlt or '' }}">
+				<img src="{{ featuredImage | url }}" alt="{{ featuredImageAlt or '' }}">
 			{% endif %}
 
 			{{ content | safe }}
@@ -67,7 +67,7 @@ layout: layout.njk
 
 		<div class="column {{ isBoxesAside and 'post-sidebar' or (noteAsideClass or 'secondary-p') }}" style="flex: {{ noteAsideFlex or '1' }};">
 			{% if noteAside %}
-				{{ noteAside | safe }}
+				{{ noteAside | fixPaths | safe }}
 			{% else %}
 				{% include "sidebar-boxes.njk" %}
 			{% endif %}
@@ -76,7 +76,7 @@ layout: layout.njk
 
 
 	{% if extraSection %}
-		{{ extraSection | safe }}
+		{{ extraSection | fixPaths | safe }}
 	{% endif %}
 </div>
 
@@ -100,9 +100,9 @@ layout: layout.njk
 	<h3>Related posts:</h3>
 	<div class="yarpp-thumbnails-horizontal">
 		{% for item in related %}
-			<a class="yarpp-thumbnail" href="{{ item.url }}">
+			<a class="yarpp-thumbnail" href="{{ item.url | url }}">
 				{% if item.data.featuredImage %}
-					<img src="{{ item.data.featuredImage }}" alt="">
+					<img src="{{ item.data.featuredImage | url }}" alt="">
 				{% endif %}
 				<span class="yarpp-thumbnail-title">{{ item.data.title }}</span>
 			</a>

@@ -51,4 +51,4 @@ Up by the Bootstraps, is a four step program, a community and support group, res
 
 ---
 
-*Next segment in this series: [Homelessness After College 2](/posts/homelessness-after-college-2/)*
+*Next segment in this series: [Homelessness After College 2]({{ '/posts/homelessness-after-college-2/' | url }})*

@@ -8,7 +8,7 @@ featuredImage: /uploads/2020/08/HomelessnessAfterCollegeEpisode2.jpg
 featuredImageAlt: "Illustration for Homelessness After College part 2"
 excerpt: "Like so many bright and hungry teenagers, Jesse and Beth listened to the adults of this nation, and worked hard in school to get into a good college. Too many teenagers from up and coming generations are faced with the same unacceptable truth."
 ---
-*Previous Segments In This Series: [Homelessness After College](/posts/homelessness-after-college/)*
+*Previous Segments In This Series: [Homelessness After College]({{ '/posts/homelessness-after-college/' | url }})*
 
 *Names of the individuals and local business have been changed for privacy and legal reasons. This story reaches further than the players involved–the universality of the issues discussed should alarm us all.*
 
@@ -60,4 +60,4 @@ Helping our youth is an investment in the future.
 
 Fight With Your Mind is calling all of the "adults in the room" to do what the private student loan industry wouldn't–recognize the undue burden. Let's do what the university they attended should have done–pay them back when they didn't receive the product they paid for. Let's do what the world should have done–show them compassion. They have earned it.
 
-The "Help Jesse and Beth get out from under their student loans donation account" [has been set up here.](/contribute) You don't have to donate an amount that will change their life–imagine what it means to just change their day.
+The "Help Jesse and Beth get out from under their student loans donation account" [has been set up here.]({{ '/contribute' | url }}) You don't have to donate an amount that will change their life–imagine what it means to just change their day.

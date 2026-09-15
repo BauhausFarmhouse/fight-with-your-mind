@@ -5,7 +5,14 @@ pagination:
   alias: cat
 permalink: "/category/{{ cat.slug }}/"
 layout: layout.njk
-title: "{{ cat.title }} – Fight With Your Mind"
+# "permalink" above is special-cased by Eleventy's pagination system, so
+# {{ cat.slug }} evaluates correctly. Plain front-matter fields like "title"
+# are NOT run through the template engine the same way — they're just
+# static string data — so "title" has to go through eleventyComputed
+# instead, which explicitly re-evaluates its value using Nunjucks syntax
+# with full access to the page's data (including "cat" from pagination).
+eleventyComputed:
+  title: "{{ cat.title }} – Fight With Your Mind"
 ---
 {#
   CATEGORY PAGE TEMPLATE
@@ -20,13 +27,13 @@ title: "{{ cat.title }} – Fight With Your Mind"
 
 <div id="cat-header-grid">
 	<div class="grid1">
-		<img src="{{ cat.heroImage }}" alt="{{ cat.title }}" width="100%">
+		<img src="{{ cat.heroImage | url }}" alt="{{ cat.title }}" width="100%">
 	</div>
 	<div class="parentgrid">
 		{% for other in otherCategories %}
 			<div class="grid{{ loop.index + 1 }}">
 				<a href="{{ ('/category/' + other.slug + '/') | url }}">
-					<img class="foursquarefight hover-big" src="{{ other.thumbImage }}" alt="{{ other.title }}" width="100%">
+					<img class="foursquarefight hover-big" src="{{ other.thumbImage | url }}" alt="{{ other.title }}" width="100%">
 				</a>
 			</div>
 		{% endfor %}
@@ -54,7 +61,7 @@ title: "{{ cat.title }} – Fight With Your Mind"
 <div class="cat-widget-container">
 	<div class="cat-text-widget" id="cat-text-widget-{{ cat.slug }}">
 		{% if cat.introHtml %}
-			{{ cat.introHtml | safe }}
+			{{ cat.introHtml | fixPaths | safe }}
 		{% else %}
 			<h1 style="font-size:5vmax">{{ cat.introHeading }}</h1>
 			{% for paragraph in cat.introText %}
@@ -83,7 +90,7 @@ title: "{{ cat.title }} – Fight With Your Mind"
 			<a target="_blank" rel="noopener" href="{{ link.url }}">
 				<div class="cat-link">
 					<div class="cat-link-thumb">
-						<img src="{{ link.image }}" alt="">
+						<img src="{{ link.image | url }}" alt="">
 					</div>
 					<div class="cat-link-text">
 						<h6>{{ link.title }}</h6>
@@ -140,20 +147,20 @@ title: "{{ cat.title }} – Fight With Your Mind"
 			<div class="column" style="flex: {{ featuredPost.data.mainColumnFlex or (isBoxesAside and '2' or '1') }};">
 				<h1>{{ featuredPost.data.title }}</h1>
 				{% if featuredPost.data.featuredImage %}
-					<img src="{{ featuredPost.data.featuredImage }}" alt="{{ featuredPost.data.featuredImageAlt or '' }}">
+					<img src="{{ featuredPost.data.featuredImage | url }}" alt="{{ featuredPost.data.featuredImageAlt or '' }}">
 				{% endif %}
 				{{ featuredPost.templateContent | safe }}
 			</div>
 			<div class="column {{ isBoxesAside and 'post-sidebar' or (featuredPost.data.noteAsideClass or 'secondary-p') }}" style="flex: {{ featuredPost.data.noteAsideFlex or (isBoxesAside and '1' or '1') }};">
 				{% if featuredPost.data.noteAside %}
-					{{ featuredPost.data.noteAside | safe }}
+					{{ featuredPost.data.noteAside | fixPaths | safe }}
 				{% else %}
 					{% include "sidebar-boxes.njk" %}
 				{% endif %}
 			</div>
 		</section>
 		{% if featuredPost.data.extraSection %}
-			{{ featuredPost.data.extraSection | safe }}
+			{{ featuredPost.data.extraSection | fixPaths | safe }}
 		{% endif %}
 	</div>
 </div>
@@ -176,13 +183,13 @@ title: "{{ cat.title }} – Fight With Your Mind"
 					</h6>
 					{% if post.data.featuredImage %}
 						<div class="post-image">
-							<img src="{{ post.data.featuredImage }}" alt="{{ post.data.featuredImageAlt or '' }}">
+							<img src="{{ post.data.featuredImage | url }}" alt="{{ post.data.featuredImageAlt or '' }}">
 						</div>
 					{% endif %}
 					<h4 class="post-title">{{ post.data.title }}</h4>
 					<p class="post-excerpt">{{ post.data.excerpt }}</p>
 					{% if not post.data.upcoming %}
-						<a class="post-full-link" href="{{ post.url }}">View</a>
+						<a class="post-full-link" href="{{ post.url | url }}">View</a>
 					{% endif %}
 				</article>
 			{% endif %}

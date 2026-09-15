@@ -9,4 +9,4 @@ featuredImageAlt: "Illustration representing the manipulation tactic: Creating F
 ---
 This tactic makes claims that two unconnected things should have an association. False associations, positive or negative, can be made by manufacturing a relationship or suggesting one thing is a catalyst for another. Implying or claiming proximity helps transfer pre-established associations without putting in effort to build a reputation from the ground up. In addition to being used as a shortcut, associations can be used to confuse or obscure true intentions by piggybacking onto trusted ideas, people, or products.
 
-**The full article is on its way.** We're still writing the in-depth breakdown of this tactic — check back soon, or [browse other posts](/fighting) in the meantime.
+**The full article is on its way.** We're still writing the in-depth breakdown of this tactic — check back soon, or [browse other posts]({{ '/fighting' | url }}) in the meantime.

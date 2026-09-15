@@ -9,4 +9,4 @@ featuredImageAlt: "Illustration representing the manipulation tactic: I'm Rubber
 ---
 This tactic is used to confuse the public, especially an uninformed audience, by accusing an innocent person of the behavior or crime that the accuser committed themself. Unless the audience is already familiar with the relevant facts of the situation, it will be difficult to discern which party is being honest.
 
-**The full article is on its way.** We're still writing the in-depth breakdown of this tactic — check back soon, or [browse other posts](/fighting) in the meantime.
+**The full article is on its way.** We're still writing the in-depth breakdown of this tactic — check back soon, or [browse other posts]({{ '/fighting' | url }}) in the meantime.

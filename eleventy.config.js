@@ -4,6 +4,54 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/uploads");
 
   // ==========================================================================
+  // PATH PREFIX (shared)
+  // Computed once here so both the site config (below) and the fixPaths
+  // filter (below) always agree on the current prefix.
+  // ==========================================================================
+  const currentPathPrefix =
+    process.env.ELEVENTY_ENV === "production" ? "/" : "/fight-with-your-mind/";
+
+  function withPrefix(path) {
+    if (!path) return path;
+    // Leave external URLs, anchors, and mailto links untouched
+    if (/^([a-z][a-z0-9+.-]*:)?\/\//i.test(path) || path.startsWith("#") || path.startsWith("mailto:")) {
+      return path;
+    }
+    const prefix = currentPathPrefix === "/" ? "" : currentPathPrefix.replace(/\/$/, "");
+    return prefix + path;
+  }
+
+  // ==========================================================================
+  // FIXPATHS FILTER
+  // Front-matter fields that hold raw HTML blocks (noteAside, extraSection,
+  // introHtml) are just YAML string DATA — Eleventy never runs Nunjucks or
+  // the "url" filter over them, even though markdownTemplateEngine is "njk"
+  // (that setting only covers the post BODY, not front-matter values). Any
+  // image or link path written inside one of those fields needs to go
+  // through this filter wherever it's output, or it'll silently stay
+  // unprefixed (or output literally, if someone tries "{{ '...' | url }}"
+  // inside the front matter — that text is never evaluated, it just prints).
+  // Usage: {{ someRawHtmlField | fixPaths | safe }}
+  // Write plain paths in these fields, e.g. src="/uploads/2020/x.png" —
+  // this filter finds and prefixes them automatically.
+  // ==========================================================================
+  eleventyConfig.addFilter("fixPaths", function (html) {
+    if (!html) return html;
+    return html
+      // Clean up any accidental "{{ '...' | url }}" left in front matter —
+      // that syntax never gets evaluated there, so treat it as the plain
+      // path it was trying to express.
+      .replace(/(src|href)=(["'])\{\{\s*'([^']+)'\s*\|\s*url\s*\}\}\2/g, (m, attr, q, path) => {
+        return `${attr}=${q}${withPrefix(path)}${q}`;
+      })
+      // Prefix any remaining plain internal path.
+      .replace(/(src|href)=(["'])(\/(?!\/)[^"']*)\2/g, (m, attr, q, path) => {
+        if (currentPathPrefix !== "/" && path.startsWith(currentPathPrefix)) return m;
+        return `${attr}=${q}${withPrefix(path)}${q}`;
+      });
+  });
+
+  // ==========================================================================
   // CATEGORY COLLECTIONS
   // The site has 6 fixed categories. This builds one Eleventy "collection"
   // per category by scanning every post's front matter "category" field.
@@ -125,7 +173,7 @@ module.exports = function (eleventyConfig) {
     // ELEVENTY_ENV=production is set in the GitHub Actions workflow for the
     // custom-domain deploy; everything else (local dev, and the plain preview
     // build) falls back to the subpath prefix.
-    pathPrefix: process.env.ELEVENTY_ENV === "production" ? "/" : "/fight-with-your-mind/",
+    pathPrefix: currentPathPrefix,
     dir: {
       input: "src",
       output: "_site",
