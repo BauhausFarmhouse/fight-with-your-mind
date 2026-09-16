@@ -219,9 +219,17 @@ a:hover { filter: brightness(0.8); }
    assumptions. Giving it an explicit "width" here instead is a more
    direct, deterministic instruction that leaves no room for a browser's
    default sizing behavior to produce a different result. */
+/* On the homepage, this box should sit flush with the paragraph text on
+   either side of it — no inset gap. (The narrower "inset" look in the
+   base .inset-box rule above is the original WordPress theme's design;
+   we're moving away from that here, one spot at a time.) The outline is
+   turned off too, since it exists specifically to create breathing room
+   around a narrower box — with no gap left to fill, it would just
+   overflow past the column's edge instead. */
 .column-50 > .inset-box {
-  width: calc(100% - 8vmax);
-  max-width: calc(100% - 8vmax);
+  width: 100%;
+  max-width: 100%;
+  outline: none;
 }
 /* The "RULE OF SEVEN" heading is close enough to the box's edge that a
    small difference in window width can push it from one line to two.
@@ -282,6 +290,15 @@ a:hover { filter: brightness(0.8); }
   background-image: url("../uploads/2020/06/Chalkboard-background-only-scaled.jpg");
   background-size: cover;
   text-align: right;
+  /* The two columns are pinned to the row's top edge by default (the
+     generic "section" rule above sets align-items: flex-start). That
+     means the text column's position has no real relationship to the
+     image beside it — it just starts wherever the top happens to be.
+     Centering it vertically instead ties its position directly to the
+     image's rendered height, so the two sides stay visually balanced
+     against each other at any width, rather than both being independently
+     anchored to the top. */
+  align-items: center;
 }
 #home-hero p { color: #ffffff; }
 #home-hero h1 { font-size: 6vmax; margin: 0; }
