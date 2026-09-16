@@ -210,6 +210,28 @@ a:hover { filter: brightness(0.8); }
   margin: 4vmax auto;
   max-width: calc(100% - 8vmax);
 }
+/* On the homepage specifically, .inset-box is a plain block-level child of
+   .column-50 (not a flex item, unlike the social-page/#experiment-row
+   version of this same class below, which sizes itself via flex:1
+   instead). The rule above relies on the browser's default block
+   behavior — stretch to fill available space, then get capped by
+   max-width — to arrive at the right width. That's an indirect chain of
+   assumptions. Giving it an explicit "width" here instead is a more
+   direct, deterministic instruction that leaves no room for a browser's
+   default sizing behavior to produce a different result. */
+.column-50 > .inset-box {
+  width: calc(100% - 8vmax);
+  max-width: calc(100% - 8vmax);
+}
+/* The "RULE OF SEVEN" heading is close enough to the box's edge that a
+   small difference in window width can push it from one line to two.
+   Giving it a touch more breathing room (slightly smaller size, tighter
+   letter-spacing) keeps it reliably on one line across ordinary desktop
+   widths without changing its appearance in any noticeable way. */
+.inset-box h2 {
+  font-size: calc(12px + 3vmax);
+  letter-spacing: 0.02em;
+}
 
 .icon-title { text-align: center; margin: -5.5vmax 0 3.5vmax 0; }
 .icon-title-ico { margin: auto; width: auto; height: 8vmax; display: block; }
