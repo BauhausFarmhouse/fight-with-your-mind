@@ -2,6 +2,13 @@ module.exports = function (eleventyConfig) {
   // Copy static assets straight through to the output folder untouched
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/uploads");
+  // GitHub Pages needs a file called "CNAME" (no extension) sitting at the
+  // root of the published site, containing just the custom domain name.
+  // It lives at the project root (next to this config file, not inside
+  // src) since it isn't really "site content" — it's deployment config —
+  // but it still needs to end up in the built output, hence copying it
+  // here explicitly.
+  eleventyConfig.addPassthroughCopy({ CNAME: "CNAME" });
 
   // ==========================================================================
   // PATH PREFIX (shared)

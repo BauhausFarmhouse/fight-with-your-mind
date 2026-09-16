@@ -23,6 +23,10 @@ jobs:
         run: npm install
       - name: Build site
         run: npx @11ty/eleventy
+        env:
+          # Tells eleventy.config.js this is the real, custom-domain build,
+          # so pathPrefix comes out as "/" instead of "/fight-with-your-mind/".
+          ELEVENTY_ENV: production
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
